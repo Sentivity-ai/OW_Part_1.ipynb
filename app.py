@@ -8,7 +8,6 @@ import pandas as pd
 import praw
 import re
 from collections import Counter
-import spacy
 
 app = Flask(__name__)
 CORS(app)
@@ -17,9 +16,16 @@ REDDIT_CLIENT_ID = os.getenv('REDDIT_CLIENT_ID', 'PH99oWZjM43GimMtYigFvA')
 REDDIT_CLIENT_SECRET = os.getenv('REDDIT_CLIENT_SECRET', '3tJsXQKEtFFYInxzLEDqRZ0s_w5z0g')
 REDDIT_USER_AGENT = os.getenv('REDDIT_USER_AGENT', 'ow_part1_box1_script')
 
-print("Loading spaCy model...")
-nlp = spacy.load("en_core_web_sm")
-print("spaCy model loaded")
+nlp = None
+
+def get_nlp():
+    global nlp
+    if nlp is None:
+        import spacy
+        print("Loading spaCy model...")
+        nlp = spacy.load("en_core_web_sm")
+        print("spaCy model loaded")
+    return nlp
 
 print("Connecting to Reddit...")
 reddit = praw.Reddit(
@@ -107,6 +113,7 @@ def extract_orgs(text: str) -> List[str]:
     if not isinstance(text, str) or not text.strip():
         return []
 
+    nlp = get_nlp()
     doc = nlp(text[:5000])
     orgs: List[str] = []
 
