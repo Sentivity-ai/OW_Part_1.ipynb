@@ -8,7 +8,7 @@ pip install --no-cache-dir "pandas<2.1" "numpy<1.25"
 pip install --no-cache-dir "spacy<3.7"
 
 echo "=== Downloading spaCy model ==="
-python -m spacy download en_core_web_sm
+pip install https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.6.0/en_core_web_sm-3.6.0-py3-none-any.whl
 
 echo "=== Verifying spaCy model ==="
 python -c "import spacy; spacy.load('en_core_web_sm'); print('Model loaded successfully')"
